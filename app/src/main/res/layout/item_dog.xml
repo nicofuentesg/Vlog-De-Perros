@@ -17,7 +17,8 @@
         android:src="@drawable/ic_delete"
         android:background="?attr/selectableItemBackground"
         android:layout_marginTop="@dimen/common_padding_default"
-        android:layout_marginEnd="@dimen/common_padding_default"/>
+        android:layout_marginEnd="@dimen/common_padding_default"
+        app:tint="@color/gray_150" />
     <TextView
         android:id="@+id/tvNameDog"
         android:layout_width="0dp"
@@ -38,9 +39,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvNameDog"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="H, 4:3"
-        android:layout_margin="@dimen/common_padding_default"/>
+        android:layout_margin="@dimen/common_padding_default"
+        />
 
     <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/cbLike"
@@ -52,7 +53,7 @@
         android:layout_marginTop="@dimen/common_padding_default"
         android:layout_marginBottom="@dimen/common_padding_min"
         android:button="@drawable/state_checkbox_like"
-        app:buttonTint="@color/black"
+        app:buttonTint="@color/gray_150"
         android:checked="true"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
