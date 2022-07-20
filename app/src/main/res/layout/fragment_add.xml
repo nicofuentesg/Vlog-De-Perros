@@ -63,15 +63,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tiTitle"
         app:layout_constraintDimensionRatio="H, 4:3"
-        android:layout_marginTop="@dimen/common_padding_default"/>
+        android:layout_marginTop="@dimen/common_padding_default"
+        android:scaleType="centerCrop"/>
     <ImageButton
+        android:id="@+id/btnImage"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="@id/ivDogUpload"
         app:layout_constraintEnd_toEndOf="@id/ivDogUpload"
         app:layout_constraintTop_toTopOf="@id/ivDogUpload"
         app:layout_constraintBottom_toBottomOf="@id/ivDogUpload"
-        android:src="@drawable/ic_image_search"/>
+        android:src="@drawable/ic_image_search"
+        android:background="?attr/selectableItemBackground"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
