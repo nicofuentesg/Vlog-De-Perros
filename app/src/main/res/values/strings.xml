@@ -9,4 +9,6 @@
     <string name="title_public">Publique</string>
     <string name="btn_public">Publicar</string>
     <string name="ed_title">Escriba un titulo</string>
+    <string name="completed_upload">Se completo la subida</string>
+    <string name="fail_upload">No se pudo Completar la subida</string>
 </resources>
