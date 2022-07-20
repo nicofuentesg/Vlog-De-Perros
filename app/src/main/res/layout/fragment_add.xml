@@ -47,7 +47,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_marginTop="@dimen/common_padding_min"
-        android:visibility="gone">
+        android:visibility="gone"
+        app:endIconMode="clear_text">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etTitle"
             android:layout_width="match_parent"

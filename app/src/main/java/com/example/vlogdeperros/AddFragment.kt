@@ -1,6 +1,7 @@
 package com.example.vlogdeperros
 
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.vlogdeperros.databinding.FragmentAddBinding
@@ -24,8 +26,9 @@ class AddFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var mPhotoSelectedUri: Uri? = null
+    private var mActivity: MainActivity? = null
 
-    //Creamos las configuraciones iciales para la base de datos
+    //Creamos las configuraciones iciales para la base de datos y la referencia
     private lateinit var mStorageReference: StorageReference
     private lateinit var mDatabaseReference: DatabaseReference
 
@@ -60,6 +63,8 @@ class AddFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        mActivity = activity as? MainActivity
         binding.apply {
             btnImage.setOnClickListener {
                 openGallery()
@@ -67,6 +72,8 @@ class AddFragment : Fragment() {
 
             btnPublic.setOnClickListener {
                 uploadPhoto()
+                tiTitle.visibility = View.GONE
+                hidekeyboard()
             }
 
         }
@@ -77,6 +84,7 @@ class AddFragment : Fragment() {
 
     private fun uploadPhoto() {
         binding.progressBar.visibility = View.VISIBLE
+
         //Guardamos la foto en la base de datos de firebase
         val storeReference = mStorageReference.child("my_photo")
         val key = mDatabaseReference.push().key!!
@@ -95,7 +103,7 @@ class AddFragment : Fragment() {
                     Toast.makeText(context,getString(R.string.completed_upload), Toast.LENGTH_SHORT).show()
                     it.storage.downloadUrl.addOnSuccessListener {
                     savePhoto(key,it.toString(),binding.etTitle.text.toString().trim())
-                    binding.tvTitle.text = getString(R.string.title_public)
+                    adjust()
                 }
 
             }
@@ -108,6 +116,7 @@ class AddFragment : Fragment() {
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         galleryLauncher.launch(intent)
+        binding.tvTitle.text = getString(R.string.title_enter)
 
     }
 
@@ -116,6 +125,23 @@ class AddFragment : Fragment() {
         mDatabaseReference.child(key).setValue(dog)
 
 
+    }
+
+    private fun hidekeyboard(){
+
+        val imm = mActivity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(requireView().windowToken, 0)
+
+    }
+
+
+    private fun adjust() {
+        binding.apply {
+            tvTitle.text = getString(R.string.title_public)
+            ivDogUpload.visibility = View.INVISIBLE
+            btnImage.visibility = View.VISIBLE
+
+        }
     }
 
 
