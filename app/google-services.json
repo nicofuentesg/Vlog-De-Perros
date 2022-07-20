@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "867532063030",
+    "project_id": "vlog-de-perros",
+    "storage_bucket": "vlog-de-perros.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:867532063030:android:b31d33b685834c40f9f397",
+        "android_client_info": {
+          "package_name": "com.example.vlogdeperros"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "867532063030-vnu6eceaav7rt18se86e6sipmlbjel83.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlRBsqwHuVHtOy9Y4WJAypoGopXJ9BIcs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "867532063030-vnu6eceaav7rt18se86e6sipmlbjel83.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
