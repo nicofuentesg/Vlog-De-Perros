@@ -53,8 +53,7 @@
         android:layout_marginTop="@dimen/common_padding_default"
         android:layout_marginBottom="@dimen/common_padding_min"
         android:button="@drawable/state_checkbox_like"
-        app:buttonTint="@color/gray_150"
-        android:checked="true"/>
+        app:buttonTint="@color/gray_150" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

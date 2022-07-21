@@ -3,12 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/VlogdePerros/app/src/main/res/drawable/ic_home.xml" value="0.1" />
         <entry key="..\:/VlogdePerros/app/src/main/res/drawable/state_checkbox_like.xml" value="0.144" />
         <entry key="..\:/VlogdePerros/app/src/main/res/layout/activity_main.xml" value="0.1953125" />
         <entry key="..\:/VlogdePerros/app/src/main/res/layout/fragment_add.xml" value="0.25" />
         <entry key="..\:/VlogdePerros/app/src/main/res/layout/fragment_home.xml" value="0.18" />
         <entry key="..\:/VlogdePerros/app/src/main/res/layout/fragment_profile.xml" value="0.33" />
-        <entry key="..\:/VlogdePerros/app/src/main/res/layout/item_dog.xml" value="0.21" />
+        <entry key="..\:/VlogdePerros/app/src/main/res/layout/item_dog.xml" value="0.15" />
         <entry key="..\:/VlogdePerros/app/src/main/res/menu/bottom_nav_menu.xml" value="0.33" />
       </map>
     </option>
