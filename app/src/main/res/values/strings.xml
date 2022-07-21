@@ -6,4 +6,15 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_dog_name">Nombre Del Perro</string>
+    <string name="title_public">Publique</string>
+    <string name="btn_public">Publicar</string>
+    <string name="ed_title">Escriba un titulo</string>
+    <string name="completed_upload">Se completo la subida</string>
+    <string name="fail_upload">No se pudo Completar la subida</string>
+    <string name="title_enter">Añada un titulo</string>
+    <string name="logout">Cerrar sesion</string>
+    <string name="goodbye">Hasta pronto.....</string>
+    <string name="profile">Perfil</string>
+    <string name="add">Publicar</string>
+    <string name="home">Inicio</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.vlogdeperros
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -16,6 +17,8 @@ import com.example.vlogdeperros.databinding.FragmentHomeBinding
 import com.example.vlogdeperros.databinding.ItemDogBinding
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
+import com.firebase.ui.database.SnapshotParser
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 
@@ -28,7 +31,7 @@ class HomeFragment : Fragment() {
     private lateinit var mFirebaseAdapter: FirebaseRecyclerAdapter <DogDataClass,DogViewHolder>
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
 
-    private lateinit var mContext: Context
+
 
 
 
@@ -37,7 +40,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        
         _binding = FragmentHomeBinding.inflate(layoutInflater)
         //Creamos la consulta
         iniciarConsulta()
@@ -63,7 +66,12 @@ class HomeFragment : Fragment() {
         val query = FirebaseDatabase.getInstance().reference.child("dogs")
 
         val options = FirebaseRecyclerOptions.Builder<DogDataClass>()
-            .setQuery(query,DogDataClass::class.java)
+            .setQuery(query,
+                SnapshotParser {
+                val dog = it.getValue(DogDataClass::class.java)
+                dog!!.id = it.key!!
+                dog
+            })
             .build()
 
 
@@ -79,10 +87,11 @@ class HomeFragment : Fragment() {
                 holder.iniciar(item)
             }
 
-
+            @SuppressLint("NotifyDataSetChanged")
             override fun onDataChanged() {
                 super.onDataChanged()
                 binding.progressBar.visibility = View.GONE
+                notifyDataSetChanged()
             }
 
             override fun onError(error: DatabaseError) {
@@ -113,14 +122,47 @@ class HomeFragment : Fragment() {
 
             binding.tvNameDog.text = dog.title
             Glide.with(binding.ivDog.context)
-                .load(dog.photoUrl).
-                diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(dog.photoUrl)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
                 .into(binding.ivDog)
+
+            binding.cbLike.text = dog.likeList.keys.size.toString()
+
+            FirebaseAuth.getInstance().currentUser?.let {
+                binding.cbLike.isChecked = dog.likeList.containsKey(it.uid)
+            }
+
+            binding.btnDelete.setOnClickListener { deleteImage(dog) }
+
+
+            binding.cbLike.setOnCheckedChangeListener { compoundButton, checked ->
+                likeDog(dog,checked)
+            }
+
 
         }
     }
 
+    private fun likeDog(dog: DogDataClass, checked: Boolean) {
+        val databaseReference = FirebaseDatabase.getInstance().reference.child("dogs")
+        if (checked){
+            databaseReference.child(dog.id).child("likeList").child(FirebaseAuth.getInstance().currentUser!!.uid).setValue(checked)
+        } else{
+            databaseReference.child(dog.id).child("likeList").child(FirebaseAuth.getInstance().currentUser!!.uid).setValue(null)
+        }
+
+
+    }
+
+
+
+    private fun deleteImage(dog: DogDataClass) {
+
+        val databaseReference = FirebaseDatabase.getInstance().reference.child("dogs")
+        databaseReference.child(dog.id).removeValue()
+
+    }
 
 
 }

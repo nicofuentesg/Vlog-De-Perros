@@ -1,59 +1,148 @@
 package com.example.vlogdeperros
 
+import android.app.Activity.RESULT_OK
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import com.example.vlogdeperros.databinding.FragmentAddBinding
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [AddFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AddFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private var _binding: FragmentAddBinding? = null
+    private val binding get() = _binding!!
+
+    private var mPhotoSelectedUri: Uri? = null
+    private var mActivity: MainActivity? = null
+
+    //Creamos las configuraciones iciales para la base de datos y la referencia
+    private lateinit var mStorageReference: StorageReference
+    private lateinit var mDatabaseReference: DatabaseReference
+
+    private val PATH_DOG = "dogs"
+
+    private val galleryLauncher =   registerForActivityResult(ActivityResultContracts.StartActivityForResult()){activityResult ->
+
+        if (activityResult.resultCode == RESULT_OK){
+
+            mPhotoSelectedUri = activityResult.data?.data
+            binding.apply {
+                tiTitle.visibility = View.VISIBLE
+                ivDogUpload.setImageURI(mPhotoSelectedUri)
+                btnImage.visibility = View.INVISIBLE
+            }
+
         }
+
+
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add, container, false)
+
+        _binding = FragmentAddBinding.inflate(layoutInflater)
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AddFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AddFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        mActivity = activity as? MainActivity
+        binding.apply {
+            btnImage.setOnClickListener {
+                openGallery()
             }
+
+            btnPublic.setOnClickListener {
+                uploadPhoto()
+                tiTitle.visibility = View.GONE
+                hidekeyboard()
+            }
+
+        }
+
+        mStorageReference = FirebaseStorage.getInstance().reference
+        mDatabaseReference = FirebaseDatabase.getInstance().reference.child(PATH_DOG)
     }
+
+    private fun uploadPhoto() {
+        binding.progressBar.visibility = View.VISIBLE
+
+        //Guardamos la foto en la base de datos de firebase
+        val storeReference = mStorageReference.child("my_photo")
+        val key = mDatabaseReference.push().key!!
+
+        if (mPhotoSelectedUri != null){
+            storeReference.putFile(mPhotoSelectedUri!!).addOnProgressListener {
+                val progress = (100 * it.bytesTransferred / it.totalByteCount).toDouble()
+                binding.progressBar.progress = progress.toInt()
+                binding.tvTitle.text = "$progress"
+            }
+                .addOnCompleteListener {
+                    binding.progressBar.visibility = View.GONE
+                 }
+
+                .addOnSuccessListener {
+                    Toast.makeText(context,getString(R.string.completed_upload), Toast.LENGTH_SHORT).show()
+                    it.storage.downloadUrl.addOnSuccessListener {
+                    savePhoto(key,it.toString(),binding.etTitle.text.toString().trim())
+                    adjust()
+                }
+
+            }
+                .addOnFailureListener{
+                Toast.makeText(context,getString(R.string.fail_upload), Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
+
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        galleryLauncher.launch(intent)
+        binding.tvTitle.text = getString(R.string.title_enter)
+
+    }
+
+    private fun savePhoto(key:String, url:String, title:String){
+        val dog = DogDataClass(title = title, photoUrl = url)
+        mDatabaseReference.child(key).setValue(dog)
+
+
+    }
+
+    private fun hidekeyboard(){
+
+        val imm = mActivity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(requireView().windowToken, 0)
+
+    }
+
+
+    private fun adjust() {
+        binding.apply {
+            tvTitle.text = getString(R.string.title_public)
+            ivDogUpload.visibility = View.INVISIBLE
+            btnImage.visibility = View.VISIBLE
+
+        }
+    }
+
+
 }
