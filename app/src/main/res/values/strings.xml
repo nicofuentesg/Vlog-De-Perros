@@ -12,4 +12,5 @@
     <string name="completed_upload">Se completo la subida</string>
     <string name="fail_upload">No se pudo Completar la subida</string>
     <string name="title_enter">Añada un titulo</string>
+    <string name="logout">Cerrar sesion</string>
 </resources>
