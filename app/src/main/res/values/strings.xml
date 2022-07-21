@@ -13,4 +13,5 @@
     <string name="fail_upload">No se pudo Completar la subida</string>
     <string name="title_enter">Añada un titulo</string>
     <string name="logout">Cerrar sesion</string>
+    <string name="goodbye">Hasta pronto.....</string>
 </resources>
