@@ -40,7 +40,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        
         _binding = FragmentHomeBinding.inflate(layoutInflater)
         //Creamos la consulta
         iniciarConsulta()

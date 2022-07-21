@@ -14,4 +14,7 @@
     <string name="title_enter">Añada un titulo</string>
     <string name="logout">Cerrar sesion</string>
     <string name="goodbye">Hasta pronto.....</string>
+    <string name="profile">Perfil</string>
+    <string name="add">Publicar</string>
+    <string name="home">Inicio</string>
 </resources>

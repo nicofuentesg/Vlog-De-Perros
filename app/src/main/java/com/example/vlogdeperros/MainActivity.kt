@@ -40,8 +40,13 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = binding.bottomNavigation
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
 
-        setupActionBarWithNavController(navController)
-        navView.setupWithNavController(navController)
+       val appBarConfiguration = AppBarConfiguration(
+           setOf(
+               R.id.action_home, R.id.action_add, R.id.action_profile
+           )
+       )
+        setupActionBarWithNavController(navController, appBarConfiguration)
+       navView.setupWithNavController(navController)
     }
 
     override fun onResume() {
